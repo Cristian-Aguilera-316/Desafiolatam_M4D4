@@ -1,50 +1,60 @@
 import { useEffect, useState } from "react";
 
-function MiApi({ searchTerm }) {
-    const [data, setData] = useState([]);
-    const Url = "https://rickandmortyapi.com/api/character";
-   
-    useEffect(() => {
-        ConsultaDeApi();
-    }, []);
-   
-    const ConsultaDeApi = async () => {
-        const response = await fetch(Url);
-        const data = await response.json();
-        setData(data.results);
-    };
+function MiApi({ searchTerm = "" }) {
+  const [characters, setCharacters] = useState([]);
+  const [page, setPage] = useState(1);
+  const [info, setInfo] = useState({});
 
-    
-    const filteredData = data.filter(character => 
-        character.name.toLowerCase().includes(searchTerm.toLowerCase())
-    );
+  useEffect(() => {
+    fetch(`https://rickandmortyapi.com/api/character?page=${page}`)
+      .then((res) => res.json())
+      .then((json) => {
+        setCharacters(json.results || []);
+        setInfo(json.info || {});
+      })
+      .catch(console.error);
+  }, [page]);
 
-    return (
-        <div id="main">
-            <h2>Lista de personajes</h2>
-            <div className="cards" >
-                {filteredData.map(character => (
-                    <div key={character.id} className="card" id="tarjeta">
-                        <div id="contenido">
-                            <div id="imagen">
-                                <img src={character.image} alt={character.name} />
-                            </div>
-                            <div>
-                                <div id="nombre">                                
-                                    <h3>{character.name}</h3>
-                                </div>
-                                <div id="informacion">
-                                    <p><span>Genero: </span>{character.gender}</p>
-                                    <p><span>Estado: </span>{character.status} </p>
-                                    <p><span>Origen: </span>{character.origin.name}</p> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                ))}
+  const filteredCharacters = characters.filter((character) =>
+    character.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <>
+      <div className="cards">
+        {filteredCharacters.map((character) => (
+          <div className="card" key={character.id}>
+            <img src={character.image} alt={character.name} />
+            <div style={{ padding: "1rem" }}>
+              <h3>{character.name}</h3>
+              <p><strong>Status:</strong> {character.status}</p>
+              <p><strong>Species:</strong> {character.species}</p>
+              <p><strong>Origin:</strong> {character.origin.name}</p>
             </div>
-        </div>
-    );
+          </div>
+        ))}
+      </div>
+
+      {/* PAGINACIÓN */}
+      <div className="pagination">
+        <button
+          onClick={() => setPage(page - 1)}
+          disabled={!info.prev}
+        >
+          ⬅ Anterior
+        </button>
+
+        <span>Página {page}</span>
+
+        <button
+          onClick={() => setPage(page + 1)}
+          disabled={!info.next}
+        >
+          Siguiente ➡
+        </button>
+      </div>
+    </>
+  );
 }
 
 export default MiApi;

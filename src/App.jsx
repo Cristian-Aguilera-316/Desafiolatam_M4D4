@@ -1,22 +1,33 @@
-import { useState } from 'react';
-import './App.css';
-import MiApi from './components/MiApi';
-import Buscador from './components/buscador';
-import Footer from './components/Footer';
+import { useState } from "react";
+import MiApi from "./components/MiApi";
+import "./App.css";
 
 function App() {
-    const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
 
-    return (
-        <div className="container">
-            <header>
-                <h1>Lista de Personajes de Rick and Morty</h1>
-            </header>
-            <Buscador setSearchTerm={setSearchTerm} />
-            <MiApi searchTerm={searchTerm} />
-            <Footer />
+  return (
+    <>
+      <main id="main">
+        <div className="hero-logo">
+          <img
+            src="./public/logo.png"
+            alt="Rick and Morty"
+          />
         </div>
-    );
+
+        <div className="search-container">
+          <input
+            type="text"
+            placeholder="Buscar personaje..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+
+        <MiApi searchTerm={searchTerm} />
+      </main>
+    </>
+  );
 }
 
 export default App;
