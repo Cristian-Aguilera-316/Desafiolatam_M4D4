@@ -10,7 +10,7 @@ function App() {
       <main id="main">
         <div className="hero-logo">
           <img
-            src="./public/logo.png"
+            src="/logo.png"
             alt="Rick and Morty"
           />
         </div>
