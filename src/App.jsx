@@ -1,6 +1,8 @@
 import { useState } from "react";
 import MiApi from "./components/MiApi";
 import "./App.css";
+import logo from "./assets/logo.png";
+
 
 function App() {
   const [searchTerm, setSearchTerm] = useState("");
@@ -9,10 +11,7 @@ function App() {
     <>
       <main id="main">
         <div className="hero-logo">
-          <img
-            src="/logo.png"
-            alt="Rick and Morty"
-          />
+          <img src={logo} alt="rick and morty" />
         </div>
 
         <div className="search-container">
